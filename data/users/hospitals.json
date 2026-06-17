@@ -1,0 +1,4 @@
+[
+  {"id":"h1","name":"Cape Town Medical Centre","email":"admin@ctmc.co.za","password":"password","role":"facility","verified":true},
+  {"id":"h2","name":"Johannesburg General","email":"admin@jhbgen.co.za","password":"password","role":"facility","verified":true}
+]

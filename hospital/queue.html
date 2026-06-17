@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue Management - MedLink SA</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+    <div class="depth-bg">
+        <div class="blob"></div>
+    </div>
+
+    <div class="app-layout">
+        <aside class="sidebar glass-card">
+            <div class="brand">MedLink SA</div>
+            <nav class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="queue.html" class="active">Queue Management</a>
+                <a href="beds.html">Bed Tracker</a>
+            </nav>
+        </aside>
+
+        <div class="main-wrapper">
+            <header class="topbar glass-card">
+                <h1>Hospital Portal - Queue</h1>
+            </header>
+
+            <main class="main-content">
+                <div class="page-content">
+                    <div class="glass-card">
+                        <h2>Current Queue</h2>
+                        <div class="liquid-glass queue-list">
+                            <p>No patients currently in the emergency queue.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>window.auth.requireAuth(['hospital']);</script>
+</body>
+</html>

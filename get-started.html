@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Started — MedLink SA</title>
+
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/glassmorphism.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/landing.css" />
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="page-base" data-page="get-started">
+  <!-- Topbar (public) -->
+  <nav class="topbar glass-nav landing-nav">
+    <a href="index.html" class="brand-mark" aria-label="MedLink SA home">
+      <span class="brand-icon"><i data-lucide="heart-pulse"></i></span>
+      <span>MedLink SA</span>
+    </a>
+
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-outline">Sign In</a>
+      <a href="explore.html" class="btn btn-primary">Explore</a>
+    </div>
+  </nav>
+
+  <main class="container" style="padding-top: 110px;">
+    <!-- Progress -->
+    <section class="scroll-reveal reveal-scale" style="max-width: 980px; margin: 0 auto;">
+      <div class="hero-badge" style="margin-bottom: 22px; display: inline-flex;">
+        <span class="hero-badge-dot"></span>
+        Step 1 of 3 — Role →
+        <span style="opacity:.8;">Details</span> →
+        <span style="opacity:.8;">Verification</span>
+      </div>
+
+      <h1 style="font-size: 44px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 10px; color: var(--text-primary);">
+        Welcome to MedLink SA — How will you use the platform?
+      </h1>
+      <p class="hero-subtitle" style="margin-bottom: 26px;">
+        Choose your role to set up the right experience for you.
+      </p>
+    </section>
+
+    <!-- Role Cards -->
+    <section class="scroll-reveal" style="max-width: 980px; margin: 0 auto;">
+      <div class="previews-section" style="padding: 0; border: 0; background: transparent; box-shadow: none;">
+        <div class="features-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px;">
+          <!-- Patient / Client -->
+          <button
+            type="button"
+            class="role-card liquid-glass"
+            style="cursor:pointer; text-align:left; background: var(--glass-bg); border: 1px solid var(--glass-border);"
+            data-role-select="patient"
+            aria-label="I'm a Patient"
+          >
+            <span style="display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background: rgba(29, 140, 145, 0.12); border: 1px solid rgba(29, 140, 145, 0.25);">
+              <i data-lucide="user-heart" style="color: var(--primary);"></i>
+            </span>
+            <span style="font-size:20px; font-weight:900; color: var(--text-primary); display:block; margin-bottom: 8px;">I'm a Patient</span>
+            <span style="color: var(--text-secondary); font-size: 14px; line-height: 1.45; display:block;">
+              Book appointments, manage prescriptions, access your health records and connect with doctors.
+            </span>
+          </button>
+
+          <!-- Provider -->
+          <button
+            type="button"
+            class="role-card liquid-glass"
+            style="cursor:pointer; text-align:left; background: var(--glass-bg); border: 1px solid var(--glass-border);"
+            data-role-select="provider"
+            aria-label="I'm a Healthcare Provider"
+          >
+            <span style="display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background: rgba(29, 140, 145, 0.12); border: 1px solid rgba(29, 140, 145, 0.25);">
+              <i data-lucide="stethoscope" style="color: var(--primary);"></i>
+            </span>
+            <span style="font-size:20px; font-weight:900; color: var(--text-primary); display:block; margin-bottom: 8px;">I'm a Healthcare Provider</span>
+            <span style="color: var(--text-secondary); font-size: 14px; line-height: 1.45; display:block;">
+              Manage your schedule, patient records, prescriptions and telemedicine consultations.
+            </span>
+            <span style="display:block; margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 700;">
+              Requires credential verification (1–2 business days)
+            </span>
+          </button>
+
+          <!-- Facility -->
+          <button
+            type="button"
+            class="role-card liquid-glass"
+            style="cursor:pointer; text-align:left; background: var(--glass-bg); border: 1px solid var(--glass-border);"
+            data-role-select="facility"
+            aria-label="I'm a Facility"
+          >
+            <span style="display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background: rgba(29, 140, 145, 0.12); border: 1px solid rgba(29, 140, 145, 0.25);">
+              <i data-lucide="building-2" style="color: var(--primary);"></i>
+            </span>
+            <span style="font-size:20px; font-weight:900; color: var(--text-primary); display:block; margin-bottom: 8px;">I'm a Facility</span>
+            <span style="color: var(--text-secondary); font-size: 14px; line-height: 1.45; display:block;">
+              Register your facility, manage departments, staff, beds, appointments and inventory.
+            </span>
+            <span style="display:block; margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 700;">
+              Requires facility registration documents
+            </span>
+          </button>
+
+          <!-- Admin (invite-only / padlock) -->
+          <button
+            type="button"
+            class="role-card liquid-glass"
+            style="cursor:pointer; text-align:left; background: var(--glass-bg); border: 1px solid var(--glass-border); opacity: .92;"
+            data-role-select="admin"
+            aria-label="I'm an Admin"
+          >
+            <span style="display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background: rgba(29, 140, 145, 0.12); border: 1px solid rgba(29, 140, 145, 0.25); position: relative;">
+              <i data-lucide="shield-check" style="color: var(--primary);"></i>
+              <span title="Admin accounts require an invitation code"
+                    style="position:absolute; top:-8px; right:-8px; background: rgba(15, 28, 46, .9); border: 1px solid rgba(255,255,255,0.14); width:26px; height:26px; border-radius: 999px; display:flex; align-items:center; justify-content:center;">
+                <i data-lucide="lock" style="width:16px; height:16px; color: rgba(29,140,145,1);"></i>
+              </span>
+            </span>
+
+            <span style="font-size:20px; font-weight:900; color: var(--text-primary); display:block; margin-bottom: 8px;">I'm an Admin</span>
+            <span style="color: var(--text-secondary); font-size: 14px; line-height: 1.45; display:block;">
+              Manage platform users, verify providers, monitor system health and platform analytics.
+            </span>
+          </button>
+        </div>
+
+        <div style="display:flex; gap: 18px; flex-wrap: wrap; justify-content: center; margin-top: 18px;">
+          <a href="login.html" class="btn btn-outline" style="border-radius: 10px;">
+            Already have an account? Sign in →
+          </a>
+          <button
+            type="button"
+            class="btn btn-outline"
+            style="border-radius: 10px; cursor:pointer;"
+            data-modal-target="role-comparison-modal"
+          >
+            Not sure which to choose? Read our guide →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Role Comparison Modal -->
+    <div class="modal-overlay" id="role-comparison-modal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-label="Role comparison">
+        <div class="modal-head">
+          <h3 class="modal-title">Role Comparison</h3>
+          <button class="modal-close" aria-label="Close">×</button>
+        </div>
+
+        <div class="modal-body" style="overflow:auto; max-height: 70vh;">
+          <div class="card" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10);">
+            <table class="table" style="width:100%; border-collapse: separate; border-spacing: 0;">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Patient</th>
+                  <th>Provider</th>
+                  <th>Facility</th>
+                  <th>Admin</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Book appointments</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                </tr>
+                <tr>
+                  <td>View prescriptions</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                </tr>
+                <tr>
+                  <td>Manage patient records</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                </tr>
+                <tr>
+                  <td>Bed management</td>
+                  <td>—</td>
+                  <td>—</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                </tr>
+                <tr>
+                  <td>Analytics dashboard</td>
+                  <td>—</td>
+                  <td>—</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                </tr>
+                <tr>
+                  <td>Verification tools</td>
+                  <td>—</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                  <td>✓</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p style="margin-top:16px; color: rgba(255,255,255,.75); font-size: 13px;">
+            Admin accounts are invite-only. An invitation code is required at registration.
+          </p>
+        </div>
+
+        <div class="modal-foot" style="justify-content:flex-end;">
+          <button class="btn btn-primary" type="button" data-modal-close>
+            Got it
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    // Minimal lucide icons init
+    lucide.createIcons();
+
+    // Role selection routing (static demo equivalents)
+    const roleToPath = {
+      patient: "register-patient.html",
+      provider: "register-doctor.html",
+      facility: "register-facility.html",
+      admin: "register-admin.html"
+    };
+
+    document.querySelectorAll("[data-role-select]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const role = btn.getAttribute("data-role-select");
+        const target = roleToPath[role];
+        if (target) window.location.href = target;
+      });
+    });
+  </script>
+
+  <!-- Reuse existing modal logic pattern from js/app.js -->
+  <script src="js/app.js"></script>
+</body>
+</html>

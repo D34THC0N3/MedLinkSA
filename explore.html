@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore Healthcare – MedLink SA</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/glassmorphism.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    .explore-layout {
+      display: flex;
+      height: 100vh;
+      padding-top: var(--topbar-height, 64px);
+    }
+    .explore-sidebar {
+      width: 380px;
+      min-width: 380px;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-dark);
+      border-right: 1px solid var(--border);
+      position: relative;
+      z-index: 10;
+      overflow-y: auto;
+    }
+    .explore-map-wrap {
+      flex: 1;
+      position: relative;
+      background: var(--bg-darker);
+    }
+    #explore-map {
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    .explore-header {
+      padding: 20px 24px 12px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--glass-bg-heavy);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 5;
+    }
+    .explore-title {
+      font-family: var(--font-heading);
+      font-size: var(--fs-xl);
+      font-weight: 900;
+      color: var(--text-primary);
+      margin: 0 0 4px;
+    }
+    .explore-subtitle {
+      font-size: var(--fs-sm);
+      color: var(--text-secondary);
+      margin: 0 0 16px;
+    }
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-tab {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      transition: all var(--transition-base);
+      white-space: nowrap;
+    }
+    .filter-tab:hover {
+      background: var(--surface-hover);
+      color: var(--text-primary);
+    }
+    .filter-tab.active {
+      background: rgba(29, 140, 145, 0.2);
+      border-color: rgba(29, 140, 145, 0.5);
+      color: var(--text-primary);
+    }
+    .filter-tab.count::after {
+      content: attr(data-count);
+      margin-left: 6px;
+      font-weight: 700;
+      opacity: 0.7;
+    }
+    .search-wrap {
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 110px;
+      background: var(--bg-dark);
+      z-index: 4;
+    }
+    .search-input {
+      width: 100%;
+      padding: 10px 14px 10px 40px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: var(--fs-sm);
+      transition: all var(--transition-base);
+    }
+    .search-input:focus {
+      border-color: rgba(29, 140, 145, 0.6);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 0 3px rgba(29, 140, 145, 0.15);
+    }
+    .search-icon {
+      position: absolute;
+      left: 36px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-tertiary);
+      pointer-events: none;
+    }
+    .result-count {
+      padding: 10px 24px;
+      font-size: var(--fs-xs);
+      color: var(--text-tertiary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .results-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 16px 24px;
+    }
+    .result-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.04) 100%);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius-xl);
+      padding: 16px;
+      margin-top: 14px;
+      cursor: pointer;
+      transition: all var(--transition-base);
+      position: relative;
+      overflow: hidden;
+    }
+    .result-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(120deg, rgba(255,255,255,0.08) 0%, transparent 30%, transparent 70%, rgba(255,255,255,0.03) 100%);
+      pointer-events: none;
+    }
+    .result-card:hover {
+      border-color: rgba(29, 140, 145, 0.4);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+      transform: translateY(-2px);
+    }
+    .result-card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .result-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(29, 140, 145, 0.15);
+      border: 1px solid rgba(29, 140, 145, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--primary);
+    }
+    .result-name {
+      font-size: var(--fs-base);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 2px;
+    }
+    .result-meta {
+      font-size: var(--fs-xs);
+      color: var(--text-secondary);
+    }
+    .result-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+    .result-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      color: var(--text-secondary);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .price-main {
+      font-weight: 800;
+      color: var(--text-primary);
+      font-size: var(--fs-md);
+    }
+    .price-compare {
+      font-size: var(--fs-xs);
+      color: var(--text-tertiary);
+    }
+    .rating-stars {
+      color: #F59E0B;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .sign-in-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-base);
+    }
+    .sign-in-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .sign-in-modal .modal-box {
+      background: var(--bg-medium);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: var(--shadow-xl);
+      transform: translateY(10px);
+      transition: transform var(--transition-spring);
+    }
+    .sign-in-modal.active .modal-box {
+      transform: translateY(0);
+    }
+    .modal-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: rgba(29, 140, 145, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1d8c91;
+    }
+    @media (max-width: 768px) {
+      .explore-layout { flex-direction: column; }
+      .explore-sidebar {
+        width: 100%;
+        min-width: 100%;
+        height: 55vh;
+      }
+      .explore-map-wrap { height: 45vh; }
+    }
+  </style>
+</head>
+
+<body class="page-base">
+  <!-- Topbar -->
+  <nav class="topbar glass-nav" style="left:0;">
+    <a href="index.html" class="brand-mark" aria-label="MedLink SA home">
+      <span class="brand-icon"><i data-lucide="heart-pulse"></i></span>
+      <span>MedLink SA</span>
+    </a>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-outline">Sign In</a>
+      <a href="get-started.html" class="btn btn-primary">Get Started</a>
+    </div>
+  </nav>
+
+  <div class="explore-layout">
+    <!-- Sidebar -->
+    <aside class="explore-sidebar">
+      <div class="explore-header">
+        <h1 class="explore-title">Explore Healthcare</h1>
+        <p class="explore-subtitle">Find hospitals, doctors, pharmacies and medications near you</p>
+        <div class="filter-tabs" id="filter-tabs">
+          <button class="filter-tab active" data-filter="all">All</button>
+          <button class="filter-tab count" data-filter="hospitals" data-count="0">Hospitals</button>
+          <button class="filter-tab count" data-filter="doctors" data-count="0">Doctors</button>
+          <button class="filter-tab count" data-filter="pharmacies" data-count="0">Pharmacies</button>
+          <button class="filter-tab count" data-filter="medications" data-count="0">Medications</button>
+        </div>
+      </div>
+      <div class="search-wrap" style="position:relative;">
+        <i data-lucide="search" class="search-icon" style="width:16px;height:16px;"></i>
+        <input type="text" class="search-input" id="search-input" placeholder="Search by name, location, specialty..." />
+      </div>
+      <div class="result-count" id="result-count">Showing 0 results</div>
+      <div class="results-list" id="results-list"></div>
+    </aside>
+
+    <!-- Map -->
+    <aside class="explore-map-wrap">
+      <div id="explore-map"></div>
+    </aside>
+  </div>
+
+  <!-- Guest Gating Modal -->
+  <div class="sign-in-modal" id="sign-in-modal">
+    <div class="modal-box liquid-glass">
+      <div class="modal-icon"><i data-lucide="lock" style="width:28px;height:28px;"></i></div>
+      <h3 style="font-size:var(--fs-xl);font-weight:800;color:var(--text-primary);margin:0 0 8px;">Sign in Required</h3>
+      <p style="font-size:var(--fs-sm);color:var(--text-secondary);margin:0 0 20px;">You need an account to book appointments, view detailed pricing, and access full provider information.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <a href="login.html" class="btn btn-primary">Sign In</a>
+        <a href="get-started.html" class="btn btn-outline">Create Account</a>
+      </div>
+      <button class="btn btn-ghost" style="margin-top:12px;font-size:var(--fs-xs);" data-modal-close>Continue as Guest</button>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Mock data
+    const MOCK = {
+      hospitals: [
+        { id: 'h1', name: 'Netcare Sunninghill Hospital', type: 'hospitals', lat: -26.058, lng: 28.064, area: 'Fourways, Johannesburg', rating: 4.7, beds: 320, er: true, priceRange: 'R2,500 – R8,000', tag: 'Private', fee: 'R5,500' },
+        { id: 'h2', name: 'Life Kingsway Hospital', type: 'hospitals', lat: -29.874, lng: 31.009, area: 'Amanzimtoti, Durban', rating: 4.5, beds: 210, er: true, priceRange: 'R2,000 – R6,500', tag: 'Private', fee: 'R4,200' },
+        { id: 'h3', name: 'Groote Schuur Hospital', type: 'hospitals', lat: -33.938, lng: 18.458, area: 'Observatory, Cape Town', rating: 4.8, beds: 890, er: true, priceRange: 'Public (Free)', tag: 'Public', fee: 'R150' },
+        { id: 'h4', name: 'Charlotte Maxeke Johannesburg Academic Hospital', type: 'hospitals', lat: -26.176, lng: 28.018, area: 'Parktown, Johannesburg', rating: 4.3, beds: 1200, er: true, priceRange: 'Public / Hybrid', tag: 'Public', fee: 'R200' },
+        { id: 'h5', name: 'Mediclinic Cape Town', type: 'hospitals', lat: -33.908, lng: 18.418, area: 'Cape Town CBD', rating: 4.6, beds: 280, er: true, priceRange: 'R3,000 – R9,000', tag: 'Private', fee: 'R5,800' },
+      ],
+      doctors: [
+        { id: 'd1', name: 'Dr. Sarah Mthembu', type: 'doctors', lat: -26.107, lng: 28.056, area: 'Rosebank, Johannesburg', specialty: 'Cardiology', rating: 4.9, fee: 'R1,800', avail: 'Today', tag: 'Cardiologist' },
+        { id: 'd2', name: 'Dr. James van der Berg', type: 'doctors', lat: -33.924, lng: 18.415, area: 'Sea Point, Cape Town', specialty: 'General Practice', rating: 4.8, fee: 'R800', avail: 'Tomorrow', tag: 'GP' },
+        { id: 'd3', name: 'Dr. Aisha Patel', type: 'doctors', lat: -29.858, lng: 31.022, area: 'Ballito, Durban', specialty: 'Pediatrics', rating: 4.7, fee: 'R1,100', avail: 'Wed 12:00', tag: 'Pediatrician' },
+        { id: 'd4', name: 'Dr. Lungile Nkosi', type: 'doctors', lat: -26.204, lng: 28.047, area: 'Sandton, Johannesburg', specialty: 'Dermatology', rating: 4.8, fee: 'R2,200', avail: 'Thu 09:00', tag: 'Dermatologist' },
+        { id: 'd5', name: 'Dr. Michael Okonkwo', type: 'doctors', lat: -25.746, lng: 28.188, area: 'Pretoria East', specialty: 'Orthopedics', rating: 4.6, fee: 'R1,900', avail: 'Fri 14:00', tag: 'Orthopedic' },
+        { id: 'd6', name: 'Dr. Priya Naidoo', type: 'doctors', lat: -29.794, lng: 31.035, area: 'Umhlanga, Durban', specialty: 'Neurology', rating: 4.9, fee: 'R2,400', avail: 'Mon 10:00', tag: 'Neurologist' },
+      ],
+      pharmacies: [
+        { id: 'p1', name: 'Clicks Healthcare Fourways Mall', type: 'pharmacies', lat: -26.032, lng: 28.003, area: 'Fourways, Johannesburg', rating: 4.4, hours: '08:00 – 21:00', delivery: true, priceRange: 'R150 – R1,200', tag: 'Retail', fee: 'R350' },
+        { id: 'p2', name: 'Dis-Chem Rosebank', type: 'pharmacies', lat: -26.144, lng: 28.038, area: 'Rosebank, Johannesburg', rating: 4.3, hours: '08:30 – 20:00', delivery: true, priceRange: 'R120 – R1,400', tag: 'Retail', fee: 'R320' },
+        { id: 'p3', name: 'Medi-Cross Constantia', type: 'pharmacies', lat: -34.042, lng: 18.421, area: 'Constantia, Cape Town', rating: 4.6, hours: '07:30 – 20:30', delivery: true, priceRange: 'R180 – R1,800', tag: 'Independent', fee: 'R450' },
+        { id: 'p4', name: 'Pharma-Direct', type: 'pharmacies', lat: -33.918, lng: 18.469, area: 'Woodstock, Cape Town', rating: 4.2, hours: '24/7', delivery: true, priceRange: 'R100 – R900', tag: 'Online', fee: 'R280' },
+      ],
+      medications: [
+        { id: 'm1', name: 'Amoxicillin 500mg Capsules', type: 'medications', brand: 'Generic / Various', price: 89, compare: 'R120 – R180', pharmacies: 12, tag: 'Antibiotic', fee: 'R89' },
+        { id: 'm2', name: 'Omeprazole 20mg Tablets', type: 'medications', brand: 'Losec / Generic', price: 145, compare: 'R180 – R350', pharmacies: 18, tag: 'Gastric', fee: 'R145' },
+        { id: 'm3', name: 'Metformin 500mg Tablets', type: 'medications', brand: 'Glucophage / Generic', price: 65, compare: 'R90 – R160', pharmacies: 22, tag: 'Diabetes', fee: 'R65' },
+        { id: 'm4', name: 'Atorvastatin 20mg', type: 'medications', brand: 'Lipitor / Generic', price: 210, compare: 'R260 – R480', pharmacies: 15, tag: 'Cholesterol', fee: 'R210' },
+        { id: 'm5', name: 'Paracetamol 1g Tablets', type: 'medications', brand: 'Panado / Generic', price: 45, compare: 'R50 – R120', pharmacies: 28, tag: 'Pain Relief', fee: 'R45' },
+        { id: 'm6', name: 'Cetirizine 10mg Tablets', type: 'medications', brand: 'Zyrtec / Generic', price: 75, compare: 'R95 – R180', pharmacies: 20, tag: 'Allergy', fee: 'R75' },
+        { id: 'm7', name: 'Losartan 50mg Tablets', type: 'medications', brand: 'Cozaar / Generic', price: 95, compare: 'R130 – R220', pharmacies: 16, tag: 'Blood Pressure', fee: 'R95' },
+      ]
+    };
+
+    // Flatten for filtering
+    const allItems = [
+      ...MOCK.hospitals,
+      ...MOCK.doctors,
+      ...MOCK.pharmacies,
+      ...MOCK.medications
+    ];
+
+    let currentFilter = 'all';
+    let searchQuery = '';
+    let mapInstance = null;
+    let mapMarkers = [];
+
+    function getIconSVG(type) {
+      if (type === 'hospitals') return '<i data-lucide="hospital" style="width:20px;height:20px;color:#1d8c91;"></i>';
+      if (type === 'doctors') return '<i data-lucide="stethoscope" style="width:20px;height:20px;color:#1d8c91;"></i>';
+      if (type === 'pharmacies') return '<i data-lucide="pill" style="width:20px;height:20px;color:#1d8c91;"></i>';
+      return '<i data-lucide="prescription" style="width:20px;height:20px;color:#1d8c91;"></i>';
+    }
+
+    function getTypeLabel(type) {
+      if (type === 'hospitals') return 'Hospital';
+      if (type === 'doctors') return 'Doctor';
+      if (type === 'pharmacies') return 'Pharmacy';
+      return 'Medication';
+    }
+
+    function renderCard(item) {
+      const icon = getIconSVG(item.type);
+      const typeLabel = getTypeLabel(item.type);
+      let priceDisplay = '';
+      if (item.type === 'medications') {
+        priceDisplay = `
+          <div class="price-row">
+            <span class="price-main">R${item.price}</span>
+            <span class="price-compare">vs ${item.compare} nationwide</span>
+          </div>`;
+      } else {
+        priceDisplay = `
+          <div class="price-row">
+            <span class="price-main">${item.fee || item.priceRange}</span>
+            <span class="price-compare">${item.priceRange || ''}</span>
+          </div>`;
+      }
+      const ratingStars = item.rating ? `<span class="rating-stars">★ ${item.rating}</span>` : '';
+      const extraMeta = [];
+      if (item.er) extraMeta.push('24/7 ER');
+      if (item.delivery) extraMeta.push('Delivery');
+      if (item.avail) extraMeta.push(item.avail);
+      if (item.hours) extraMeta.push(item.hours);
+      return `
+        <div class="result-card" data-id="${item.id}" data-type="${item.type}">
+          <div class="result-card-head">
+            <div class="result-icon">${icon}</div>
+            <div>
+              <div class="result-name">${item.name}</div>
+              <div class="result-meta">${item.area || item.brand || ''} · ${typeLabel}</div>
+            </div>
+          </div>
+          <div class="result-tags">
+            <span class="result-tag">${item.tag || item.specialty || typeLabel}</span>
+            ${ratingStars}
+            ${extraMeta.map(m => `<span class="result-tag">${m}</span>`).join('')}
+          </div>
+          ${priceDisplay}
+        </div>`;
+    }
+
+    function filterItems() {
+      return allItems.filter(item => {
+        const matchFilter = currentFilter === 'all' || item.type === currentFilter;
+        const q = searchQuery.toLowerCase();
+        const matchSearch = !q || (item.name && item.name.toLowerCase().includes(q)) ||
+          (item.area && item.area.toLowerCase().includes(q)) ||
+          (item.specialty && item.specialty.toLowerCase().includes(q)) ||
+          (item.tag && item.tag.toLowerCase().includes(q)) ||
+          (item.brand && item.brand.toLowerCase().includes(q));
+        return matchFilter && matchSearch;
+      });
+    }
+
+    function renderResults() {
+      const items = filterItems();
+      const list = document.getElementById('results-list');
+      document.getElementById('result-count').textContent = `Showing ${items.length} result${items.length !== 1 ? 's' : ''}`;
+      list.innerHTML = items.map(renderCard).join('');
+      lucide.createIcons();
+      // Re-attach card clicks to open sign-in modal
+      list.querySelectorAll('.result-card').forEach(card => {
+        card.addEventListener('click', () => openSignInModal());
+      });
+    }
+
+    function updateCounts() {
+      const counts = { all: allItems.length };
+      Object.keys(MOCK).forEach(k => { counts[k] = MOCK[k].length; });
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        const f = tab.getAttribute('data-filter');
+        if (f && counts[f] !== undefined) {
+          tab.setAttribute('data-count', counts[f]);
+          tab.textContent = tab.textContent.replace(/^\d+/, '').trim();
+          if (tab.classList.contains('count')) {
+            // preserve emoji/text
+            const base = tab.textContent.trim();
+            tab.textContent = base + (f !== 'all' ? '' : '');
+            tab.setAttribute('data-count', counts[f]);
+          }
+        }
+      });
+    }
+
+    function initMap() {
+      mapInstance = L.map('explore-map').setView([-29.0, 24.0], 4);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(mapInstance);
+    }
+
+    function syncMarkers() {
+      if (!mapInstance) return;
+      mapMarkers.forEach(m => mapInstance.removeLayer(m));
+      mapMarkers = [];
+      const items = filterItems();
+      const hasGeo = items.filter(i => i.lat && i.lng);
+      if (!hasGeo.length) return;
+      const bounds = [];
+      hasGeo.forEach(item => {
+        const markerType = item.type;
+        const markerColor = markerType === 'hospitals' ? '#ef4444' : markerType === 'doctors' ? '#1d8c91' : markerType === 'pharmacies' ? '#8B5CF6' : '#F59E0B';
+        const icon = L.divIcon({
+          className: '',
+          html: `<div style="width:34px;height:34px;border-radius:50%;background:${markerColor};border:3px solid white;box-shadow:0 4px 12px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;"><span style="color:white;font-weight:900;font-size:14px;">${markerType[0].toUpperCase()}</span></div>`,
+          iconSize: [34, 34],
+          iconAnchor: [17, 17],
+          popupAnchor: [0, -18]
+        });
+        const marker = L.marker([item.lat, item.lng], { icon }).addTo(mapInstance);
+        marker.bindPopup(`
+          <div style="font-family:Plus Jakarta Sans,Inter,sans-serif;color:#0F172A;min-width:220px;">
+            <div style="font-weight:800;font-size:14px;">${item.name}</div>
+            <div style="font-size:12px;color:#64748B;">${item.area || item.brand || ''} · ${getTypeLabel(item.type)}</div>
+            ${item.rating ? `<div style="margin-top:6px;font-size:12px;">★ ${item.rating}</div>` : ''}
+            ${item.fee ? `<div style="margin-top:6px;font-weight:700;color:#0F172A;">${item.fee}</div>` : ''}
+          </div>
+        `);
+        marker.on('click', () => openSignInModal());
+        mapMarkers.push(marker);
+        bounds.push([item.lat, item.lng]);
+      });
+      if (bounds.length) mapInstance.fitBounds(bounds, { padding: [60, 60] });
+    }
+
+    function openSignInModal() {
+      document.getElementById('sign-in-modal').classList.add('active');
+    }
+
+    function init() {
+      updateCounts();
+      initMap();
+      renderResults();
+      syncMarkers();
+
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentFilter = tab.getAttribute('data-filter');
+          renderResults();
+          syncMarkers();
+        });
+      });
+
+      document.getElementById('search-input').addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        renderResults();
+        syncMarkers();
+      });
+
+      document.querySelectorAll('[data-modal-close]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.getElementById('sign-in-modal').classList.remove('active');
+        });
+      });
+      document.getElementById('sign-in-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'sign-in-modal') e.target.classList.remove('active');
+      });
+
+      // Window resize -> invalidate map size
+      window.addEventListener('resize', () => { if (mapInstance) mapInstance.invalidateSize(); });
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

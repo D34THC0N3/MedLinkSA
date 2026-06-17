@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patients - Doctor Portal</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="depth-bg">
+        <div class="glow-sphere sphere-1"></div>
+        <div class="glow-sphere sphere-2"></div>
+        <div class="glow-sphere sphere-3"></div>
+    </div>
+    <div class="dashboard-layout">
+        <aside class="sidebar glass-card">
+            <div class="sidebar-header">
+                <h2>MedLink SA</h2>
+                <span class="role-badge">Doctor</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="patients.html" class="nav-item active">Patients</a>
+                <a href="calendar.html" class="nav-item">Calendar</a>
+                <a href="prescriptions.html" class="nav-item">Prescriptions</a>
+                <a href="followups.html" class="nav-item">Follow-ups</a>
+                <a href="notes.html" class="nav-item">Notes</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="nav-item text-danger">Logout</button>
+            </div>
+        </aside>
+        <div class="main-wrapper">
+            <header class="topbar glass-card">
+                <div class="topbar-search">
+                    <input type="text" placeholder="Search..." class="glass-input">
+                </div>
+                <div class="topbar-actions">
+                    <div class="user-profile">
+                        <span id="user-name-display">Doctor</span>
+                    </div>
+                </div>
+            </header>
+            <main class="main-content">
+                <div class="page-content">
+                    <header class="page-header">
+                        <h1>My Patients</h1>
+                    </header>
+                    <div class="content-section glass-card">
+                        <div class="filters" style="margin-bottom: 1rem;">
+                            <input type="text" placeholder="Search patients..." class="glass-input" style="width: 100%; max-width: 300px;">
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table" style="width: 100%; text-align: left;">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>ID</th>
+                                        <th>Last Visit</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>John Doe</td>
+                                        <td>#P-1001</td>
+                                        <td>2026-05-20</td>
+                                        <td>Active</td>
+                                        <td><button class="btn btn-sm">View</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/auth.js"></script>
+    <script src="../js/main.js"></script>
+    <script>window.auth.requireAuth(['doctor']);</script>
+</body>
+</html>

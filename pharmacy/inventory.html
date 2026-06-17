@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory - MedLink SA</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/glassmorphism.css">
+</head>
+<body>
+    <div class="depth-bg">
+        <div class="layer layer-1"></div>
+        <div class="layer layer-2"></div>
+        <div class="layer layer-3"></div>
+    </div>
+    
+    <aside class="sidebar liquid-glass">
+        <div class="logo">
+            <h2>MedLink SA</h2>
+        </div>
+        <nav class="nav-links">
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="prescriptions.html">Prescriptions</a></li>
+                <li><a href="inventory.html" class="active">Inventory</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <header class="topbar glass-card">
+        <div class="page-title">
+            <h1>Pharmacy Inventory</h1>
+        </div>
+        <div class="user-profile">
+            <span>Pharmacist User</span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="page-content">
+            <div class="glass-card">
+                <h2>Current Stock Levels</h2>
+                <div style="margin-top: 15px; margin-bottom: 15px;">
+                    <input type="text" placeholder="Search medications..." class="search-input" style="padding: 8px; width: 100%; max-width: 300px; border-radius: 4px; border: 1px solid #ccc;">
+                </div>
+                <table class="data-table" style="width: 100%; text-align: left;">
+                    <thead>
+                        <tr>
+                            <th>Medication Name</th>
+                            <th>Category</th>
+                            <th>Stock Level</th>
+                            <th>Threshold</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Amoxicillin 500mg</td>
+                            <td>Antibiotic</td>
+                            <td>245 units</td>
+                            <td>50 units</td>
+                            <td><span class="status in-stock" style="color: green;">In Stock</span></td>
+                        </tr>
+                        <tr>
+                            <td>Ibuprofen 400mg</td>
+                            <td>Pain Relief</td>
+                            <td>12 units</td>
+                            <td>20 units</td>
+                            <td><span class="status low-stock" style="color: red;">Low Stock</span></td>
+                        </tr>
+                        <tr>
+                            <td>Metformin 500mg</td>
+                            <td>Diabetes</td>
+                            <td>150 units</td>
+                            <td>30 units</td>
+                            <td><span class="status in-stock" style="color: green;">In Stock</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="glass-card liquid-glass" style="margin-top: 20px;">
+                <h3>Order Supplies</h3>
+                <p>Request restock for low-inventory medications directly from suppliers.</p>
+                <button class="btn" style="margin-top: 10px;">Create Purchase Order</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>window.auth.requireAuth(['pharmacy']);</script>
+</body>
+</html>

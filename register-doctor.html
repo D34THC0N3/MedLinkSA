@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register as Doctor – MedLink SA</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/glassmorphism.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .back-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 999px;
+      color: var(--text-primary);
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      margin-bottom: 24px;
+      transition: all var(--transition-base);
+    }
+    .back-nav:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(29,140,145,0.4);
+    }
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(29, 140, 145, 0.15);
+      border: 1px solid rgba(29, 140, 145, 0.3);
+      color: var(--text-primary);
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .verification-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 14px 16px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: var(--radius-md);
+      margin-bottom: 22px;
+    }
+    .verification-note i { color: #F59E0B; flex-shrink: 0; margin-top: 2px; }
+    .verification-note p { font-size: var(--fs-sm); color: var(--text-secondary); margin: 0; }
+    .file-upload-area {
+      border: 2px dashed rgba(255,255,255,0.12);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: center;
+      background: rgba(255,255,255,0.02);
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
+    .file-upload-area:hover, .file-upload-area.dragover {
+      border-color: rgba(29,140,145,0.5);
+      background: rgba(29,140,145,0.05);
+    }
+    .file-upload-icon { font-size: 2rem; color: var(--text-secondary); margin-bottom: 8px; }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 520px) { .form-grid-2 { grid-template-columns: 1fr; } }
+    .auth-form-wrapper { max-height: 70vh; overflow-y: auto; }
+    .auth-form-wrapper::-webkit-scrollbar { width: 4px; }
+    .auth-form-wrapper::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+  </style>
+</head>
+<body class="page-base">
+  <div id="page-transition-curtain" class="transition-curtain">
+    <div class="transition-curtain-glow"></div>
+    <div class="transition-curtain-logo">
+      <i data-lucide="activity" style="width:40px;height:40px;"></i>
+      <span>MedLink SA</span>
+    </div>
+  </div>
+
+  <div class="auth-page">
+    <div class="auth-left scroll-reveal reveal-left">
+      <div class="auth-container">
+        <a href="get-started.html" class="back-nav">
+          <i data-lucide="arrow-left" style="width:16px;height:16px;"></i>
+          Back to roles
+        </a>
+        <a href="index.html" class="auth-logo" style="margin-bottom:20px;">
+          <div class="auth-logo-icon"><i data-lucide="activity" style="color:white;"></i></div>
+          <span class="auth-logo-text">MedLink SA</span>
+        </a>
+
+        <div class="auth-form-wrapper liquid-glass" style="padding: 32px;">
+          <div class="role-badge">
+            <i data-lucide="stethoscope" style="width:16px;height:16px;"></i>
+            Doctor / Specialist Registration
+          </div>
+
+          <div class="verification-note">
+            <i data-lucide="info" style="width:18px;height:18px;"></i>
+            <p>Your registration requires credential verification. This typically takes <strong>1–2 business days</strong>. You will receive an email once your account is approved.</p>
+          </div>
+
+          <div class="auth-header" style="margin-bottom: 22px;">
+            <h1 class="auth-title">Provider account details</h1>
+            <p class="auth-subtitle">Upload your credentials to start accepting patients</p>
+          </div>
+
+          <form onsubmit="handleRegister(event, 'doctor')">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-input" placeholder="Sarah" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-input" placeholder="Mthembu" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" placeholder="dr.smith@clinic.co.za" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" class="form-input" placeholder="+27 83 555 7890" required />
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Specialty</label>
+                <select class="form-select" required>
+                  <option value="">Select specialty</option>
+                  <option>General Practice</option>
+                  <option>Cardiology</option>
+                  <option>Dermatology</option>
+                  <option>Pediatrics</option>
+                  <option>Neurology</option>
+                  <option>Orthopedics</option>
+                  <option>Psychiatry</option>
+                  <option>Gynecology</option>
+                  <option>Oncology</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Years of Experience</label>
+                <input type="number" class="form-input" placeholder="e.g. 8" min="0" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">HPCSA Registration Number</label>
+              <input type="text" class="form-input" placeholder="MP0XXXXXX" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Practicing Facility</label>
+              <input type="text" class="form-input" placeholder="Hospital or clinic name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Upload Credentials (PDF)</label>
+              <div class="file-upload-area" onclick="this.querySelector('input').click()">
+                <input type="file" accept=".pdf" style="display:none;" />
+                <div class="file-upload-icon"><i data-lucide="upload-cloud" style="width:32px;height:32px;color:var(--text-secondary);"></i></div>
+                <p style="font-size:var(--fs-sm);color:var(--text-secondary);margin:0;">Click to upload HPCSA certificate, qualification, or ID</p>
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" placeholder="Create a strong password" required minlength="8" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" class="form-input" placeholder="Re-enter password" required minlength="8" />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px;">Submit for Verification</button>
+            <p style="text-align:center;font-size:var(--fs-xs);color:var(--text-tertiary);margin-top:14px;">
+              Already verified? <a href="login.html" style="color:var(--primary-light);">Sign in</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="auth-right">
+      <div class="auth-illustration">
+        <div class="float-el float-el-1">
+          <div class="float-icon" style="background:var(--gradient-primary);"><i data-lucide="shield-check" style="width:18px;height:18px;color:#fff;"></i></div>
+          <div class="float-text"><span class="lbl">Verification</span><span class="val">~24 Hours</span></div>
+        </div>
+        <div class="float-el float-el-2">
+          <div class="float-icon" style="background:linear-gradient(135deg, #10B981, #059669);"><i data-lucide="calendar-plus" style="width:18px;height:18px;color:#fff;"></i></div>
+          <div class="float-text"><span class="lbl">Pending queue</span><span class="val">2 requests</span></div>
+        </div>
+        <img src="../Gemini_Generated_Image_s1suhls1suhls1su.png" alt="Doctor illustration" style="width:100%;border-radius:var(--radius-xl);position:relative;z-index:2;" onerror="this.style.display='none'" />
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    function handleRegister(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'Submitting for Verification...';
+      setTimeout(() => {
+        btn.textContent = '✓ Submitted for Review';
+        btn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
+        setTimeout(() => {
+          window.location.href = 'doctor/dashboard.html';
+        }, 800);
+      }, 1400);
+    }
+    lucide.createIcons();
+  </script>
+</body>
+</html>

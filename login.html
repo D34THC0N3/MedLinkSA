@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication – MedLink SA</title>
+  
+  <!-- CSS Foundations -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/glassmorphism.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+  
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="page-base">
+
+  <!-- Global Page Transition Curtain -->
+  <div id="page-transition-curtain" class="transition-curtain">
+    <div class="transition-curtain-glow"></div>
+    <div class="transition-curtain-logo">
+      <i data-lucide="activity" style="width:40px;height:40px;"></i>
+      <span>MedLink SA</span>
+    </div>
+  </div>
+
+  <!-- Depth System injected by JS, but we can add static one for auth specifically if needed -->
+  
+  <div class="auth-page">
+    
+    <!-- Left Side: Forms -->
+    <div class="auth-left scroll-reveal reveal-left">
+      <div class="auth-container">
+        
+        <!-- Logo -->
+        <a href="index.html" class="auth-logo">
+          <div class="auth-logo-icon"><i data-lucide="activity" style="color:white;"></i></div>
+          <span class="auth-logo-text">MedLink SA</span>
+        </a>
+        
+        <div class="auth-form-wrapper liquid-glass">
+          
+          <!-- View Container -->
+          <div id="view-signin">
+            <div class="auth-header">
+              <h1 class="auth-title">Welcome back</h1>
+              <p class="auth-subtitle">Sign in to your account to continue</p>
+            </div>
+            
+            <form id="form-login" onsubmit="handleLogin(event)">
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <div class="relative">
+                  <i data-lucide="mail" style="position:absolute;left:12px;top:12px;color:var(--text-secondary);width:18px;"></i>
+                  <input type="email" id="login-email" class="form-input" style="padding-left:40px;" placeholder="john.doe@example.com" required value="john.doe@example.com">
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <div class="flex justify-between items-center mb-sm">
+                  <label class="form-label" style="margin:0;">Password</label>
+                  <a href="#" class="text-xs text-primary hover:underline" onclick="switchView('view-recovery')">Forgot password?</a>
+                </div>
+                <div class="relative">
+                  <i data-lucide="lock" style="position:absolute;left:12px;top:12px;color:var(--text-secondary);width:18px;"></i>
+                  <input type="password" id="login-pass" class="form-input" style="padding-left:40px;" placeholder="••••••••" required value="password123">
+                </div>
+                <p class="text-xs text-secondary mt-sm">Tip: Use admin@medlink.sa or dr.smith@medlink.sa</p>
+              </div>
+              
+              <div class="form-group flex justify-between items-center">
+                <label class="form-check">
+                  <input type="checkbox">
+                  <span class="text-sm text-secondary">Remember me</span>
+                </label>
+              </div>
+              
+              <button type="submit" class="btn btn-primary" style="width:100%;" id="btn-login">
+                Sign In
+              </button>
+            </form>
+            
+            <div class="mt-xl text-center">
+              <p class="text-sm text-secondary">
+                Don't have an account? <a href="#" class="text-primary fw-semibold" onclick="switchView('view-signup')">Create one</a>
+              </p>
+            </div>
+          </div>
+          
+          <!-- 2FA View -->
+          <div id="view-2fa" style="display:none;">
+            <div class="auth-header text-center">
+              <div class="two-factor-icon"><i data-lucide="shield-check"></i></div>
+              <h1 class="auth-title">Two-Factor Authentication</h1>
+              <p class="auth-subtitle">We've sent a code to your registered device</p>
+            </div>
+            
+            <form id="form-2fa" onsubmit="handle2FA(event)">
+              <div class="otp-inputs">
+                <input type="text" class="otp-input" maxlength="1" required autofocus oninput="moveNext(this, 1)">
+                <input type="text" class="otp-input" maxlength="1" required id="otp-1" oninput="moveNext(this, 2)">
+                <input type="text" class="otp-input" maxlength="1" required id="otp-2" oninput="moveNext(this, 3)">
+                <input type="text" class="otp-input" maxlength="1" required id="otp-3" oninput="moveNext(this, 4)">
+                <input type="text" class="otp-input" maxlength="1" required id="otp-4" oninput="moveNext(this, 5)">
+                <input type="text" class="otp-input" maxlength="1" required id="otp-5">
+              </div>
+              
+              <button type="submit" class="btn btn-primary" style="width:100%;" id="btn-verify">
+                Verify Identity
+              </button>
+            </form>
+            
+            <div class="mt-lg text-center">
+              <p class="text-sm text-secondary">
+                Didn't receive code? <a href="#" class="text-primary hover:underline">Resend</a>
+              </p>
+              <a href="#" class="text-sm text-secondary mt-sm block" onclick="switchView('view-signin')">Cancel</a>
+            </div>
+          </div>
+          
+          <!-- View Signup -->
+          <div id="view-signup" style="display:none;">
+            <div class="auth-header">
+              <h1 class="auth-title">Create Account</h1>
+              <p class="auth-subtitle">Join the MedLink SA platform</p>
+            </div>
+            
+            <div class="role-selector">
+              <div class="role-option selected" onclick="selectRole(this, 'patient')">
+                <div class="role-icon"><i data-lucide="user"></i></div>
+                <div class="role-name">Patient</div>
+              </div>
+              <div class="role-option" onclick="selectRole(this, 'doctor')">
+                <div class="role-icon"><i data-lucide="stethoscope"></i></div>
+                <div class="role-name">Provider</div>
+              </div>
+            </div>
+            
+            <form id="form-signup" onsubmit="handleSignup(event)">
+              <div class="grid grid-2 gap-md mb-md">
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label">First Name</label>
+                  <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label">Last Name</label>
+                  <input type="text" class="form-input" required>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" required oninput="checkStrength(this.value)">
+                <div class="password-strength">
+                  <div class="strength-bar" id="s-bar-1"></div>
+                  <div class="strength-bar" id="s-bar-2"></div>
+                  <div class="strength-bar" id="s-bar-3"></div>
+                </div>
+              </div>
+              
+              <div id="provider-fields" style="display:none;">
+                <div class="form-group">
+                  <label class="form-label">HPCSA Registration Number</label>
+                  <input type="text" class="form-input">
+                </div>
+                <div class="file-upload-area">
+                  <div class="file-upload-icon"><i data-lucide="upload-cloud"></i></div>
+                  <p class="text-sm text-primary mb-xs fw-medium">Click to upload your credentials</p>
+                  <p class="text-xs text-secondary">PDF, JPG or PNG (Max 5MB)</p>
+                </div>
+              </div>
+              
+              <div class="form-group mt-lg">
+                <label class="form-check">
+                  <input type="checkbox" required>
+                  <span class="text-xs text-secondary">I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a> (POPIA Compliant)</span>
+                </label>
+              </div>
+              
+              <button type="submit" class="btn btn-primary" style="width:100%;" id="btn-signup">
+                Create Account
+              </button>
+            </form>
+            
+            <div class="mt-xl text-center">
+              <p class="text-sm text-secondary">
+                Already have an account? <a href="#" class="text-primary fw-semibold" onclick="switchView('view-signin')">Sign in</a>
+              </p>
+            </div>
+          </div>
+          
+          <!-- View Recovery -->
+          <div id="view-recovery" style="display:none;">
+            <div class="auth-header">
+              <h1 class="auth-title">Reset Password</h1>
+              <p class="auth-subtitle">Enter your email and we'll send you a recovery link</p>
+            </div>
+            
+            <form onsubmit="handleRecovery(event)">
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" placeholder="john.doe@example.com" required>
+              </div>
+              
+              <button type="submit" class="btn btn-primary" style="width:100%;">
+                Send Recovery Link
+              </button>
+            </form>
+            
+            <div class="mt-xl text-center">
+              <a href="#" class="text-sm text-secondary hover:text-primary flex items-center justify-center gap-xs" onclick="switchView('view-signin')">
+                <i data-lucide="arrow-left" style="width:16px;"></i> Back to sign in
+              </a>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Side: Visuals -->
+    <div class="auth-right scroll-reveal reveal-right delay-200">
+      
+      <!-- Abstract representation of connectivity instead of an image to match design system -->
+      <div class="auth-illustration flex items-center justify-center">
+        <div style="position:relative; width:400px; height:400px;">
+          <!-- Central Hub -->
+          <div class="liquid-glass flex items-center justify-center animate-pulse-glow" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:120px; height:120px; border-radius:50%; z-index:10;">
+            <i data-lucide="activity" style="color:var(--primary); width:48px; height:48px;"></i>
+          </div>
+          
+          <!-- Orbiting Nodes -->
+          <div class="glass-card flex items-center justify-center animate-float" style="position:absolute; top:10%; left:20%; width:64px; height:64px; border-radius:16px; animation-delay:-1s;">
+            <i data-lucide="user" style="color:var(--text-secondary);"></i>
+          </div>
+          
+          <div class="glass-card flex items-center justify-center animate-float" style="position:absolute; bottom:15%; left:10%; width:80px; height:80px; border-radius:50%; animation-delay:-3s;">
+            <i data-lucide="stethoscope" style="color:var(--accent);"></i>
+          </div>
+          
+          <div class="glass-card flex items-center justify-center animate-float" style="position:absolute; top:25%; right:10%; width:72px; height:72px; border-radius:16px; animation-delay:-2s;">
+            <i data-lucide="pill" style="color:var(--warning);"></i>
+          </div>
+          
+          <div class="glass-card flex items-center justify-center animate-float" style="position:absolute; bottom:20%; right:15%; width:64px; height:64px; border-radius:50%; animation-delay:-4s;">
+            <i data-lucide="building-2" style="color:var(--danger);"></i>
+          </div>
+          
+          <!-- Connecting Lines SVG -->
+          <svg style="position:absolute; inset:0; width:100%; height:100%; z-index:0;" pointer-events="none">
+            <line x1="200" y1="200" x2="120" y2="80" stroke="var(--border-light)" stroke-width="2" stroke-dasharray="4 4" />
+            <line x1="200" y1="200" x2="100" y2="300" stroke="var(--border-light)" stroke-width="2" stroke-dasharray="4 4" />
+            <line x1="200" y1="200" x2="310" y2="120" stroke="var(--border-light)" stroke-width="2" stroke-dasharray="4 4" />
+            <line x1="200" y1="200" x2="310" y2="300" stroke="var(--border-light)" stroke-width="2" stroke-dasharray="4 4" />
+          </svg>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/notifications.js"></script>
+  <script>
+    // Initialize Icons
+    lucide.createIcons();
+
+    // View switching
+    function switchView(viewId) {
+      document.getElementById('view-signin').style.display = 'none';
+      document.getElementById('view-signup').style.display = 'none';
+      document.getElementById('view-recovery').style.display = 'none';
+      document.getElementById('view-2fa').style.display = 'none';
+      
+      const el = document.getElementById(viewId);
+      el.style.display = 'block';
+      el.classList.remove('slide-up-enter');
+      void el.offsetWidth; // trigger reflow
+      el.classList.add('slide-up-enter');
+    }
+
+    // Role selection
+    let selectedRole = 'patient';
+    function selectRole(element, role) {
+      document.querySelectorAll('.role-option').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+      selectedRole = role;
+      
+      const providerFields = document.getElementById('provider-fields');
+      if (role !== 'patient') {
+        providerFields.style.display = 'block';
+        providerFields.classList.add('slide-up-enter');
+      } else {
+        providerFields.style.display = 'none';
+      }
+    }
+
+    // Password strength
+    function checkStrength(val) {
+      const b1 = document.getElementById('s-bar-1');
+      const b2 = document.getElementById('s-bar-2');
+      const b3 = document.getElementById('s-bar-3');
+      
+      b1.className = 'strength-bar'; b2.className = 'strength-bar'; b3.className = 'strength-bar';
+      
+      if (val.length > 0) { b1.classList.add('active', 'weak'); }
+      if (val.length >= 6) { b1.classList.replace('weak', 'medium'); b2.classList.add('active', 'medium'); }
+      if (val.length >= 8 && /[A-Z]/.test(val) && /[0-9]/.test(val)) { 
+        b1.classList.replace('medium', 'strong'); 
+        b2.classList.replace('medium', 'strong'); 
+        b3.classList.add('active', 'strong'); 
+      }
+    }
+
+    // OTP Input movement
+    function moveNext(current, nextId) {
+      if (current.value.length === 1) {
+        const next = document.getElementById('otp-' + nextId);
+        if (next) next.focus();
+      }
+    }
+
+    // Handlers
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-pass').value;
+      const btn = document.getElementById('btn-login');
+      
+      btn.innerHTML = '<i data-lucide="loader" class="animate-spin" style="width:16px;"></i> Authenticating...';
+      btn.disabled = true;
+      lucide.createIcons();
+      
+      try {
+        await window.auth.login(email, pass);
+        // Success -> go to 2FA
+        window.notify.success('Success', 'Credentials verified.');
+        switchView('view-2fa');
+      } catch (err) {
+        window.notify.error('Login Failed', err.message);
+        btn.innerHTML = 'Sign In';
+        btn.disabled = false;
+      }
+    }
+
+    async function handle2FA(e) {
+      e.preventDefault();
+      const inputs = document.querySelectorAll('.otp-input');
+      let code = '';
+      inputs.forEach(i => code += i.value);
+      
+      const btn = document.getElementById('btn-verify');
+      btn.innerHTML = '<i data-lucide="loader" class="animate-spin" style="width:16px;"></i> Verifying...';
+      btn.disabled = true;
+      lucide.createIcons();
+      
+      try {
+        await window.auth.verify2FA(code);
+        window.notify.success('Verified', 'Redirecting to your dashboard...');
+        setTimeout(() => window.auth.routeToDashboard(), 1000);
+      } catch (err) {
+        window.notify.error('Verification Failed', err.message);
+        btn.innerHTML = 'Verify Identity';
+        btn.disabled = false;
+        inputs.forEach(i => i.value = '');
+        inputs[0].focus();
+      }
+    }
+
+    function handleSignup(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-signup');
+      btn.innerHTML = '<i data-lucide="loader" class="animate-spin" style="width:16px;"></i> Creating Account...';
+      btn.disabled = true;
+      lucide.createIcons();
+      
+      setTimeout(() => {
+        window.notify.success('Account Created', 'Please check your email to verify your address.');
+        switchView('view-signin');
+        btn.innerHTML = 'Create Account';
+        btn.disabled = false;
+      }, 1500);
+    }
+
+    function handleRecovery(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.innerHTML = '<i data-lucide="loader" class="animate-spin" style="width:16px;"></i> Sending...';
+      btn.disabled = true;
+      lucide.createIcons();
+      
+      setTimeout(() => {
+        window.notify.success('Email Sent', 'If an account exists, a recovery link has been sent.');
+        switchView('view-signin');
+        btn.innerHTML = 'Send Recovery Link';
+        btn.disabled = false;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

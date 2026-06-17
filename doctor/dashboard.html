@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Doctor Portal</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="depth-bg">
+        <div class="glow-sphere sphere-1"></div>
+        <div class="glow-sphere sphere-2"></div>
+        <div class="glow-sphere sphere-3"></div>
+    </div>
+    <div class="dashboard-layout">
+        <aside class="sidebar glass-card">
+            <div class="sidebar-header">
+                <h2>MedLink SA</h2>
+                <span class="role-badge">Doctor</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item active">Dashboard</a>
+                <a href="patients.html" class="nav-item">Patients</a>
+                <a href="calendar.html" class="nav-item">Calendar</a>
+                <a href="prescriptions.html" class="nav-item">Prescriptions</a>
+                <a href="followups.html" class="nav-item">Follow-ups</a>
+                <a href="notes.html" class="nav-item">Notes</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="nav-item text-danger">Logout</button>
+            </div>
+        </aside>
+        <div class="main-wrapper">
+            <header class="topbar glass-card">
+                <div class="topbar-search">
+                    <input type="text" placeholder="Search..." class="glass-input">
+                </div>
+                <div class="topbar-actions">
+                    <div class="user-profile">
+                        <span id="user-name-display">Doctor</span>
+                    </div>
+                </div>
+            </header>
+            <main class="main-content">
+                <div class="page-content">
+                    <header class="page-header">
+                        <h1>Welcome back, Dr. Smith</h1>
+                        <p>Here's what's happening today.</p>
+                    </header>
+                    <div class="stats-grid">
+                        <div class="stat-card glass-card">
+                            <h3>Appointments Today</h3>
+                            <div class="stat-value">8</div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <h3>Pending Prescriptions</h3>
+                            <div class="stat-value">3</div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <h3>New Messages</h3>
+                            <div class="stat-value">5</div>
+                        </div>
+                    </div>
+                    <div class="content-section glass-card">
+                        <h2>Upcoming Appointments</h2>
+                        <div class="list-container">
+                            <div class="list-item">
+                                <div><strong>John Doe</strong> - General Checkup</div>
+                                <div>10:00 AM</div>
+                            </div>
+                            <div class="list-item">
+                                <div><strong>Jane Smith</strong> - Follow-up</div>
+                                <div>11:30 AM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/auth.js"></script>
+    <script src="../js/main.js"></script>
+    <script>window.auth.requireAuth(['doctor']);</script>
+</body>
+</html>

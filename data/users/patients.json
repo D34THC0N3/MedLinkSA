@@ -1,0 +1,4 @@
+[
+  {"id":"p1","name":"Sarah Johnson","email":"sarah@example.com","password":"password","role":"patient","verified":true},
+  {"id":"p2","name":"John Doe","email":"john@example.com","password":"password","role":"patient","verified":true}
+]

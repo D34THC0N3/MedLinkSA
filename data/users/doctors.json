@@ -1,0 +1,4 @@
+[
+  {"id":"d1","name":"Dr. Sarah Evans","email":"sarah.evans@medlink.co.za","password":"password","role":"provider","specialty":"Cardiology","verified":true},
+  {"id":"d2","name":"Dr. Michael Chen","email":"michael.chen@medlink.co.za","password":"password","role":"provider","specialty":"General Medicine","verified":true}
+]

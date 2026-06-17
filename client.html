@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Dashboard – MedLink SA</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/modern-base.css">
+  <style>
+    .client-dashboard {
+      display: flex;
+      height: 100vh;
+      padding-top: var(--topbar-height, 64px);
+      background: var(--bg-darker);
+    }
+    .client-sidebar {
+      width: 280px;
+      min-width: 280px;
+      background: var(--bg-dark);
+      border-right: 1px solid var(--border);
+      padding: var(--space-xl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .client-main {
+      flex: 1;
+      padding: var(--space-4xl);
+      overflow-y: auto;
+    }
+    .client-header {
+      margin-bottom: var(--space-3xl);
+    }
+    .client-welcome {
+      font-family: var(--font-display);
+      font-size: var(--fs-2xl);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: var(--space-sm);
+    }
+    .client-subtitle {
+      color: var(--text-secondary);
+      font-size: var(--fs-md);
+    }
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-lg);
+      margin-bottom: var(--space-3xl);
+    }
+    .quick-action-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
+    .quick-action-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+    .quick-action-icon {
+      width: 48px;
+      height:48px;
+      background: var(--gradient-primary);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--fs-xl);
+      margin-bottom: var(--space-lg);
+    }
+    .quick-action-title {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-xs);
+    }
+    .quick-action-desc {
+      font-size: var(--fs-sm);
+      color: var(--text-secondary);
+    }
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-lg);
+      margin-bottom: var(--space-3xl);
+    }
+    .status-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+    }
+    .status-title {
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-md);
+    }
+    .status-value {
+      font-size: var(--fs-2xl);
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .status-change {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: var(--fs-xs);
+      margin-top: var(--space-sm);
+    }
+    .status-change.positive {
+      color: var(--success);
+    }
+    .status-change.negative {
+      color: var(--danger);
+    }
+    .appointments-section {
+      margin-bottom: var(--space-3xl);
+    }
+    .section-title {
+      font-size: var(--fs-xl);
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--space-xl);
+    }
+    .appointments-grid {
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .appointment-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      transition: all var(--transition-base);
+    }
+    .appointment-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+    .appointment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-md);
+    }
+    .appointment-provider {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .appointment-specialty {
+      font-size: var(--fs-sm);
+      color: var(--text-secondary);
+      margin-top: var(--space-xs);
+    }
+    .appointment-time {
+      text-align: right;
+    }
+    .appointment-date {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .appointment-type {
+      font-size: var(--fs-sm);
+      color: var(--text-secondary);
+      margin-top: var(--space-xs);
+    }
+    .appointment-status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      margin-top: var(--space-md);
+    }
+    .status-scheduled {
+      background: rgba(0, 122, 255, 0.1);
+      color: var(--primary);
+      border: 1px solid rgba(0, 122, 255, 0.2);
+    }
+    .status-confirmed {
+      background: rgba(52, 199, 89, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(52, 199, 89, 0.2);
+    }
+    .status-completed {
+      background: rgba(142, 142, 147, 0.1);
+      color: var(--text-secondary);
+      border: 1px solid rgba(142, 142, 147, 0.2);
+    }
+    .status-cancelled {
+      background: rgba(255, 92, 92, 0.1);
+      color: var(--danger);
+      border: 1px solid rgba(255, 92, 92, 0.2);
+    }
+    .medications-section {
+      margin-bottom: var(--space-3xl);
+    }
+    .medications-grid {
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .medication-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+    }
+    .medication-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-md);
+    }
+    .medication-name {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .medication-dose {
+      font-size: var(--fs-sm);
+      color: var(--text-secondary);
+      margin-top: var(--space-xs);
+    }
+    .medication-status {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: var(--fs-xs);
+      font-weight: 600);
+    }
+    .status-refill-due {
+      background: rgba(255, 149, 0, 0.1);
+      color: var(--warning);
+      border: 1px solid rgba(255, 149, 0, 0.2);
+    }
+    .status-active {
+      background: rgba(52, 199, 89, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(52, 199, 89, 0.2);
+    }
+    .status-expired {
+      background: rgba(142, 142, 147, 0.1);
+      color: var(--text-tertiary);
+      border: 1px solid rgba(142, 142, 147, 0.2);
+    }
+    .emergency-contacts {
+      background: var(--gradient-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+    }
+    .emergency-contacts-title {
+      font-size: var(--fs-lg);
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-lg);
+    }
+    .contact-list {
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .contact-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-lg);
+      background: var(--surface);
+      border-radius: var(--radius-md);
+    }
+    .contact-name {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .contact-relationship {
+      font-size: var(--fs-sm);
+      color: var(--text-secondary);
+    }
+    .contact-phone {
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .health-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-lg);
+      margin-bottom: var(--space-3xl);
+    }
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      text-align: center;
+    }
+    .metric-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--fs-lg);
+      margin: 0 auto var(--space-lg);
+    }
+    .metric-value {
+      font-size: var(--fs-2xl);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: var(--space-xs);
+    }
+    .metric-label {
+      font-size: var(--fs-sm);
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body class="page-base">
+  <!-- Topbar -->
+  <nav class="topbar glass-nav">
+    <a href="index.html" class="brand-mark" aria-label="MedLink SA home">
+      <span class="brand-icon"><i data-lucide="heart-pulse"></i></span>
+      <span>MedLink SA</span>
+    </a>
+    <div class="topbar-right">
+      <div class="nav-actions">
+        <label class="theme-switch theme-toggle" data-tooltip="Toggle theme">
+          <input type="checkbox" aria-label="Toggle light and dark mode">
+          <span class="toggle-track"><span class="toggle-knob"></span></span>
+        </label>
+        <div class="user-menu">
+          <div class="user-avatar">
+            <i data-lucide="user"></i>
+          </div>
+          <div class="user-info">
+            <span class="user-name">Sarah Chen</span>
+            <span class="user-role">Patient</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="client-dashboard">
+    <aside class="client-sidebar">
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="section-title">DASHBOARD</div>
+          <a href="#" class="nav-item active">
+            <i data-lucide="home" style="width:20px;height:20px;"></i>
+            <span>Overview</span>
+          </a>
+          <a href="#appointments" class="nav-item">
+            <i data-lucide="calendar-clock" style="width:20px;height:20px;"></i>
+            <span>Appointments</span>
+          </a>
+          <a href="#medications" class="nav-item">
+            <i data-lucide="pill" style="width:20px;height:20px;"></i>
+            <span>Medications</span>
+          </a>
+          <a href="#records" class="nav-item">
+            <i data-lucide="file-text" style="width:20px;height:20px;"></i>
+            <span>Medical Records</span>
+          </a>
+          <a href="#emergency" class="nav-item">
+            <i data-lucide="alert-triangle" style="width:20px;height:20px;"></i>
+            <span>Emergency Contacts</span>
+          </a>
+        </div>
+        <div class="nav-section">
+          <div class="section-title">HEALTH TOOLS</div>
+          <a href="#trackers" class="nav-item">
+            <i data-lucide="activity" style="width:20px;height:20px;"></i>
+            <span>Health Trackers</span>
+          </a>
+          <a href="#telemedicine" class="nav-item">
+            <i data-lucide="video" style="width:20px;height:20px;"></i>
+            <span>Telemedicine</span>
+          </a>
+          <a href="#doctors" class="nav-item">
+            <i data-lucide="stethoscope" style="width:20px;height:20px;"></i>
+            <span>Find Doctors</span>
+          </a>
+          <a href="#facilities" class="nav-item">
+            <i data-lucide="hospital" style="width:20px;height:20px;"></i>
+            <span>Healthcare Facilities</span>
+          </a>
+        </div>
+        <div class="nav-section">
+          <div class="section-title">ACCOUNT</div>
+          <a href="#profile" class="nav-item">
+            <i data-lucide="user" style="width:20px;height:20px;"></i>
+            <span>Profile Settings</span>
+          </a>
+          <a href="#billing" class="nav-item">
+            <i data-lucide="credit-card" style="width:20px;height:20px;"></i>
+            <span>Billing & Insurance</span>
+          </a>
+          <a href="#security" class="nav-item">
+            <i data-lucide="shield-check" style="width:20px;height:20px;"></i>
+            <span>Security</span>
+          </a>
+          <a href="#help" class="nav-item">
+            <i data-lucide="help-circle" style="width:20px;height:20px;"></i>
+            <span>Help & Support</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="client-main">
+      <div class="client-header">
+        <h1 class="client-welcome">Welcome back, Sarah!</h1>
+        <p class="client-subtitle">Your personalized healthcare dashboard</p>
+      </div>
+
+      <div class="quick-actions">
+        <div class="quick-action-card" onclick="window.location.href='patient/appointments.html'" style="cursor: pointer;">
+          <div class="quick-action-icon">📅</div>
+          <div class="quick-action-title">Book Appointment</div>
+          <div class="quick-action-desc">Schedule with a doctor or specialist</div>
+        </div>
+        <div class="quick-action-card" onclick="window.location.href='patient/emergency.html'" style="cursor: pointer;">
+          <div class="quick-action-icon">🆘</div>
+          <div class="quick-action-title">Emergency Contact</div>
+          <div class="quick-action-desc">Access emergency medical profile</div>
+        </div>
+        <div class="quick-action-card" onclick="window.location.href='patient/medications.html'" style="cursor: pointer;">
+          <div class="quick-action-icon">💊</div>
+          <div class="quick-action-title">Refill Prescriptions</div>
+          <div class="quick-action-desc">Manage your medications</div>
+        </div>
+        <div class="quick-action-card" onclick="window.location.href='patient/telemedicine.html'" style="cursor: pointer;">
+          <div class="quick-action-icon">📹</div>
+          <div class="quick-action-title">Video Consultation</div>
+          <div class="quick-action-desc">Join virtual doctor visit</div>
+        </div>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card">
+          <div class="status-title">Upcoming Appointments</div>
+          <div class="status-value">3</div>
+          <div class="status-change positive">
+            <i data-lucide="arrow-up-right" style="width:12px;height:12px;"></i>
+            2 new this week
+          </div>
+        </div>
+        <div class="status-card">
+          <div class="status-title">Active Prescriptions</div>
+          <div class="status-value">4</div>
+          <div class="status-change negative">
+            <i data-lucide="arrow-down-right" style="width:12px;height:12px;"></i>
+            1 refill needed
+          </div>
+        </div>
+        <div class="status-card">
+          <div class="status-title">Health Score</div>
+          <div class="status-value">87</div>
+          <div class="status-change positive">
+            <i data-lucide="arrow-up-right" style="width:12px;height:12px;"></i>
+            3% improvement
+          </div>
+        </div>
+        <div class="status-card">
+          <div class="status-title">Emergency Contacts</div>
+          <div class="status-value">2</div>
+          <div class="status-change">
+            <span>All set</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="appointments-section" id="appointments">
+        <h2 class="section-title">Upcoming Appointments</h2>
+        <div class="appointments-grid">
+          <div class="appointment-card">
+            <div class="appointment-header">
+              <div>
+                <div class="appointment-provider">Dr. Michael Chen</div>
+                <div class="appointment-specialty">Cardiology</div>
+              </div>
+              <div class="appointment-time">
+                <div class="appointment-date">Oct 15, 2024</div>
+                <div class="appointment-type">In-Person Visit</div>
+              </div>
+            </div>
+            <div>
+              <span class="appointment-status status-confirmed">Confirmed</span>
+            </div>
+          </div>
+          <div class="appointment-card">
+            <div class="appointment-header">
+              <div>
+                <div class="appointment-provider">Dr. Sarah Kim</div>
+                <div class="appointment-specialty">General Practice</div>
+              </div>
+              <div class="appointment-time">
+                <div class="appointment-date">Oct 18, 2024</div>
+                <div class="appointment-type">Telemedicine</div>
+              </div>
+            </div>
+            <div>
+              <span class="appointment-status status-scheduled">Scheduled</span>
+            </div>
+          </div>
+          <div class="appointment-card">
+            <div class="appointment-header">
+              <div>
+                <div class="appointment-provider">Dr. James Wilson</div>
+                <div class="appointment-specialty">Dermatology</div>
+              </div>
+              <div class="appointment-time">
+                <div class="appointment-date">Oct 22, 2024</div>
+                <div class="appointment-type">In-Person Visit</div>
+              </div>
+            </div>
+            <div>
+              <span class="appointment-status status-scheduled">Scheduled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="medications-section" id="medications">
+        <h2 class="section-title">Current Medications</h2>
+        <div class="medications-grid">
+          <div class="medication-card">
+            <div class="medication-header">
+              <div>
+                <div class="medication-name">Lisinopril 10mg</div>
+                <div class="medication-dose">Once daily with meals</div>
+              </div>
+              <span class="medication-status status-active">Active</span>
+            </div>
+          </div>
+          <div class="medication-card">
+            <div class="medication-header">
+              <div>
+                <div class="medication-name">Metformin 500mg</div>
+                <div class="medication-dose">Twice daily with meals</div>
+              </div>
+              <span class="medication-status status-refill-due">Refill Due</span>
+            </div>
+          </div>
+          <div class="medication-card">
+            <div class="medication-header">
+              <div>
+                <div class="medication-name">Albuterol Inhaler</div>
+                <div class="medication-dose">As needed for breathing</div>
+              </div>
+              <span class="medication-status status-active">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="emergency-contacts" id="emergency">
+        <h2 class="section-title">Emergency Contacts</h2>
+        <div class="contact-list">
+          <div class="contact-item">
+            <div class="contact-name">John Chen (Spouse)</div>
+            <div class="contact-relationship">Spouse</div>
+            <div class="contact-phone">+1 (555) 123-4567</div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-name">Dr. Sarah Martinez</div>
+            <div class="contact-relationship">Primary Care</div>
+            <div class="contact-phone">+1 (555) 987-6543</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Portal - Medical Records - MedLink SA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="../css/vars.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/custom.css">
+</head>
+<body class="dashboard-body">
+    <div class="depth-bg">
+        <div class="depth-layer layer-1"></div>
+        <div class="depth-layer layer-2"></div>
+        <div class="depth-layer layer-3"></div>
+    </div>
+
+    <div class="dashboard-container">
+        <aside class="sidebar glass-card">
+            <div class="sidebar-header">
+                <span class="material-icons brand-icon">health_and_safety</span>
+                <span class="brand-text">MedLink SA</span>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <span class="nav-section-title">Patient Portal</span>
+                    <a href="dashboard.html" class="nav-item"><span class="material-icons-outlined">dashboard</span> Dashboard</a>
+                    <a href="appointments.html" class="nav-item"><span class="material-icons-outlined">calendar_today</span> Appointments</a>
+                    <a href="prescriptions.html" class="nav-item"><span class="material-icons-outlined">receipt</span> Prescriptions</a>
+                    <a href="medications.html" class="nav-item"><span class="material-icons-outlined">medication</span> Medications</a>
+                    <a href="records.html" class="nav-item active"><span class="material-icons-outlined">folder_shared</span> Medical Records</a>
+                    <a href="health-tracking.html" class="nav-item"><span class="material-icons-outlined">monitor_heart</span> Health Tracking</a>
+                    <a href="telemedicine.html" class="nav-item"><span class="material-icons-outlined">video_camera_front</span> Telemedicine</a>
+                    <a href="checkin.html" class="nav-item"><span class="material-icons-outlined">how_to_reg</span> Self Check-in</a>
+                    <a href="emergency.html" class="nav-item text-danger"><span class="material-icons-outlined">emergency</span> Emergency</a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item" id="logoutBtn"><span class="material-icons-outlined">logout</span> Logout</a>
+            </div>
+        </aside>
+
+        <div class="main-wrapper">
+            <header class="topbar liquid-glass">
+                <div class="topbar-left">
+                    <button class="icon-btn mobile-menu-toggle"><span class="material-icons">menu</span></button>
+                    <h2 class="page-title">Medical Records</h2>
+                </div>
+                <div class="topbar-right">
+                    <div class="notifications">
+                        <button class="icon-btn"><span class="material-icons-outlined">notifications</span><span class="badge">3</span></button>
+                    </div>
+                    <div class="user-profile">
+                        <div class="avatar"><span class="material-icons">person</span></div>
+                        <span class="user-name" id="userNameDisplay">Patient</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <div class="page-content">
+                    <div class="glass-card p-4">
+                        <div class="flex-between mb-4">
+                            <h3>Medical Records & Test Results</h3>
+                            <button class="btn btn-primary"><span class="material-icons">upload</span> Upload Record</button>
+                        </div>
+                        <div class="grid-layout">
+                            <div class="glass-card p-3 text-center liquid-glass">
+                                <span class="material-icons text-primary" style="font-size: 48px;">description</span>
+                                <h4 class="mt-2">Complete Blood Count (CBC)</h4>
+                                <p class="text-muted mb-3">Oct 10, 2023</p>
+                                <button class="btn btn-sm btn-outline">View Report</button>
+                            </div>
+                            <div class="glass-card p-3 text-center liquid-glass">
+                                <span class="material-icons text-primary" style="font-size: 48px;">image</span>
+                                <h4 class="mt-2">Chest X-Ray</h4>
+                                <p class="text-muted mb-3">Sep 05, 2023</p>
+                                <button class="btn btn-sm btn-outline">View Images</button>
+                            </div>
+                            <div class="glass-card p-3 text-center liquid-glass">
+                                <span class="material-icons text-primary" style="font-size: 48px;">vaccines</span>
+                                <h4 class="mt-2">Vaccination History</h4>
+                                <p class="text-muted mb-3">Updated Aug 2023</p>
+                                <button class="btn btn-sm btn-outline">View Record</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="../js/patient.js"></script>
+    <script>window.auth.requireAuth(['patient']);</script>
+</body>
+</html>
