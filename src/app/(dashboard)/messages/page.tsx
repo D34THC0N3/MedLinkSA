@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MessageSquare, Search, Phone, Video, Send, AttachFile, X, CheckCircle, Clock } from 'lucide-react';
+import { MessageSquare, Search, Phone, Video, Send, Paperclip, X, CheckCircle, Clock } from 'lucide-react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 
 interface Message {
@@ -115,7 +115,7 @@ export default function MessagesPage() {
               </div>
               <div className="p-3" style={{ borderTop: '1px solid var(--card-border)' }}>
                 <div className="flex items-center gap-2">
-                  <button className="btn-ghost p-2"><AttachFile size={16} /></button>
+                  <button className="btn-ghost p-2"><Paperclip size={16} /></button>
                   <input type="text" value={messageText} onChange={e => setMessageText(e.target.value)} placeholder="Type a message..." className="flex-1 px-3 py-2 rounded-lg text-sm border outline-none" style={{ background: 'var(--input-bg)', borderColor: 'var(--input-border)', color: 'var(--text-primary)' }} />
                   <button className="btn-primary p-2" style={{ borderRadius: '50%', width: 36, height: 36 }}>
                     <Send size={16} />
