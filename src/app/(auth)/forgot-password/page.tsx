@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { HeartPulse, CheckCircle, Sun, Moon } from 'lucide-react';
@@ -8,9 +8,12 @@ import { BackgroundCanvas } from '@/components/BackgroundCanvas';
 
 export default function ForgotPasswordPage() {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const isLight = theme !== 'dark';
+
+  useEffect(() => { setMounted(true); }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +39,7 @@ export default function ForgotPasswordPage() {
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             className="ml-1 p-2 rounded-lg transition-colors hover:bg-white/10" style={{ color: isLight ? 'rgba(18,18,18,0.6)' : 'rgba(248,250,252,0.6)' }}
           >
-            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            {mounted ? (theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />) : <div style={{ width: 16, height: 16 }} />}
           </button>
         </div>
       </nav>

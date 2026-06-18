@@ -11,6 +11,7 @@ export function BackgroundCanvas() {
     if (!container) return;
 
     const isDark = document.documentElement.classList.contains('dark');
+    const isMobile = window.innerWidth < 768;
 
     const scene = new THREE.Scene();
     if (isDark) scene.background = new THREE.Color(0x1A1A1E);
@@ -31,7 +32,8 @@ export function BackgroundCanvas() {
       new THREE.OctahedronGeometry(0.35, 0),
       new THREE.TetrahedronGeometry(0.3, 0),
     ];
-    for (let i = 0; i < 12; i++) {
+    const shapeCount = isMobile ? 5 : 12;
+    for (let i = 0; i < shapeCount; i++) {
       const geo = geos[i % geos.length];
       const mat = new THREE.MeshPhysicalMaterial({
         color: i % 2 === 0 ? 0x2563EB : 0x3B82F6,
@@ -59,8 +61,8 @@ export function BackgroundCanvas() {
       shapes.push(mesh);
     }
 
-    // Particles
-    const pCount = 200;
+    // Particles (reduce count on mobile for performance)
+    const pCount = isMobile ? 60 : 200;
     const pGeo = new THREE.BufferGeometry();
     const pos = new Float32Array(pCount * 3);
     for (let i = 0; i < pCount * 3; i++) pos[i] = (Math.random() - 0.5) * 50;

@@ -136,43 +136,16 @@ export default function AdminDashboard() {
 
   return (
     <DashboardLayout>
-      <div
-        style={{
-          padding: '32px',
-          maxWidth: '1440px',
-          margin: '0 auto',
-        }}
-      >
-        <h1
-          className="section-title"
-          style={{
-            fontSize: '28px',
-            fontWeight: 600,
-            color: 'var(--foreground)',
-            margin: '0 0 4px',
-          }}
-        >
+      <div className="w-full">
+        <h1 className="section-title text-xl sm:text-2xl md:text-[28px] font-semibold mb-1" style={{ color: 'var(--foreground)' }}>
           Admin Dashboard
         </h1>
-        <p
-          style={{
-            fontSize: '14px',
-            color: 'var(--foreground-secondary)',
-            margin: '0 0 28px',
-          }}
-        >
+        <p className="text-sm md:text-base mb-5 sm:mb-7" style={{ color: 'var(--foreground-secondary)' }}>
           Platform overview and system management
         </p>
 
-        {/* ── Stat Row (6 cards) ── */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(6, 1fr)',
-            gap: '16px',
-            marginBottom: '28px',
-          }}
-        >
+        {/* ── Stat Row (responsive grid) ── */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-5 sm:mb-7">
           <div
             className="stat-card"
             style={{
@@ -432,14 +405,8 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* ── Two Column Layout ── */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '60% 40%',
-            gap: '20px',
-          }}
-        >
+        {/* ── Responsive Two Column Layout ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-4 lg:gap-5">
           {/* ══ LEFT COLUMN (60%) ══ */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {/* Platform Analytics */}
@@ -502,13 +469,7 @@ export default function AdminDashboard() {
                 </button>
               </div>
               <div className="card-body" style={{ padding: '20px 24px' }}>
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gap: '24px',
-                  }}
-                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   {/* AreaChart - User Growth */}
                   <div>
                     <p

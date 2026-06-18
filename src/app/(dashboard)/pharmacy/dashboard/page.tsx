@@ -44,7 +44,7 @@ export default function PharmacyDashboard() {
   return (
     <DashboardLayout title="Pharmacy Operations: CureMed — Cape Town Branch">
       <div className="space-y-6">
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <div className="stat-card">
             <div className="flex items-start justify-between mb-1">
               <span className="stat-label">Pending</span>

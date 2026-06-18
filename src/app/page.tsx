@@ -39,11 +39,18 @@ export default function LandingPage() {
   const [splashDone, setSplashDone] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setSplashDone(true), 10000);
+    if (sessionStorage.getItem('medlink_splash_seen')) {
+      setSplashDone(true);
+      return;
+    }
+    const timer = setTimeout(() => {
+      sessionStorage.setItem('medlink_splash_seen', '1');
+      setSplashDone(true);
+    }, 3000);
     return () => clearTimeout(timer);
   }, []);
 
-  if (!splashDone) return <SplashScreen3D onSkip={() => setSplashDone(true)} />;
+  if (!splashDone) return <SplashScreen3D onSkip={() => { sessionStorage.setItem('medlink_splash_seen', '1'); setSplashDone(true); }} />;
   return <MainLanding />;
 }
 
@@ -53,7 +60,7 @@ function SplashScreen3D({ onSkip }: { onSkip?: () => void }) {
   const [canSkip, setCanSkip] = useState(false);
 
   useEffect(() => {
-    const skipTimer = setTimeout(() => setCanSkip(true), 3000);
+    const skipTimer = setTimeout(() => setCanSkip(true), 1500);
     return () => clearTimeout(skipTimer);
   }, []);
 
@@ -62,11 +69,16 @@ function SplashScreen3D({ onSkip }: { onSkip?: () => void }) {
     if (!container) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(0, 0.5, 7);
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const aspect = w / h;
+    const isMobile = w < 768;
+    const camZ = isMobile ? 9 : 7;
+    const camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 100);
+    camera.position.set(0, 0.5, camZ);
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
+    renderer.setSize(w, h);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 0.9;
@@ -174,9 +186,12 @@ function SplashScreen3D({ onSkip }: { onSkip?: () => void }) {
     animate();
 
     const onResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const nw = window.innerWidth;
+      const nh = window.innerHeight;
+      camera.aspect = nw / nh;
+      camera.position.set(0, 0.5, nw < 768 ? 9 : 7);
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(nw, nh);
     };
     window.addEventListener('resize', onResize);
 
@@ -184,8 +199,8 @@ function SplashScreen3D({ onSkip }: { onSkip?: () => void }) {
     const tick = () => {
       if (destroyed) return;
       const elapsed = Date.now() - start;
-      setProgress(Math.min(elapsed / 10000, 1));
-      if (elapsed < 10000) requestAnimationFrame(tick);
+      setProgress(Math.min(elapsed / 3000, 1));
+      if (elapsed < 3000) requestAnimationFrame(tick);
     };
     const raf = requestAnimationFrame(tick);
 
@@ -201,9 +216,9 @@ function SplashScreen3D({ onSkip }: { onSkip?: () => void }) {
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#070707', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <div ref={canvasRef} style={{ position: 'absolute', inset: 0, zIndex: 0 }} />
-      <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '0 24px', maxWidth: 360 }}>
-        <h1 style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-0.03em', color: '#F8FAFC', marginBottom: 12 }}>MedLink SA</h1>
-        <p style={{ fontSize: 14, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(248,250,252,0.45)', marginBottom: 40 }}>The Future of Healthcare, Available Today.</p>
+      <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '0 24px', maxWidth: '85vw', width: 360 }}>
+        <h1 style={{ fontSize: 'clamp(28px, 8vw, 40px)', fontWeight: 700, letterSpacing: '-0.03em', color: '#F8FAFC', marginBottom: 12 }}>MedLink SA</h1>
+        <p style={{ fontSize: 'clamp(11px, 3vw, 14px)', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(248,250,252,0.45)', marginBottom: 40 }}>The Future of Healthcare, Available Today.</p>
         <div style={{ width: 200, height: 2, margin: '0 auto', borderRadius: 1, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
           <div style={{ height: '100%', borderRadius: 1, background: 'linear-gradient(90deg, #2563EB, #3B82F6)', width: `${progress * 100}%`, transition: 'width 0.3s linear' }} />
         </div>
@@ -244,29 +259,10 @@ function MainLanding() {
     return () => ScrollTrigger.getAll().forEach(st => st.kill());
   }, []);
 
-  useEffect(() => {
-    document.documentElement.style.setProperty('--cursor-color', '#2563EB');
-    document.documentElement.style.setProperty('--cursor-ring-color', 'rgba(37,99,235,0.15)');
-  }, []);
-
   const isLight = theme !== 'dark';
 
-  useEffect(() => {
-    if (isLight) {
-      document.documentElement.style.setProperty('--section-bg', '#DADAE0');
-      document.documentElement.style.setProperty('--section-bg-alt', '#D0D0D6');
-      document.documentElement.style.setProperty('--section-bg-role', '#C8C8CE');
-      document.documentElement.style.setProperty('--section-bg-cta', '#C0C0C6');
-    } else {
-      document.documentElement.style.setProperty('--section-bg', '#141418');
-      document.documentElement.style.setProperty('--section-bg-alt', '#121216');
-      document.documentElement.style.setProperty('--section-bg-role', '#141418');
-      document.documentElement.style.setProperty('--section-bg-cta', '#101014');
-    }
-  }, [isLight]);
-
   return (
-    <div className="min-h-screen" style={{ background: isLight ? '#E5E5E9' : '#151519' }}>
+    <div className="min-h-screen" style={{ background: 'var(--landing-bg)' }}>
       <HeroSection />
       <StatsSection />
       <FeaturesSection />
@@ -280,7 +276,7 @@ function MainLanding() {
 function StatsSection() {
   return (
     <section className="py-16 px-6 stats-section" style={{ background: 'var(--section-bg)' }}>
-      <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         {[
           { value: '10,000+', label: 'Patients Supported' },
           { value: '500+', label: 'Prescriptions Managed' },

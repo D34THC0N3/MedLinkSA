@@ -1,4 +1,5 @@
 [
   {"id":"d1","name":"Dr. Sarah Evans","email":"sarah.evans@medlink.co.za","password":"password","role":"provider","specialty":"Cardiology","verified":true},
-  {"id":"d2","name":"Dr. Michael Chen","email":"michael.chen@medlink.co.za","password":"password","role":"provider","specialty":"General Medicine","verified":true}
+  {"id":"d2","name":"Dr. Michael Chen","email":"michael.chen@medlink.co.za","password":"password","role":"provider","specialty":"General Medicine","verified":true},
+  {"id":"d3","name":"Doctor Test","email":"Doctor@gmail.com","password":"12345678","role":"provider","specialty":"General Medicine","verified":true}
 ]

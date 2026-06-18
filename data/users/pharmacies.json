@@ -1,3 +1,4 @@
 [
-  {"id":"ph1","name":"CureMed Pharmacy","email":"info@curemed.co.za","password":"password","role":"pharmacy","verified":true}
+  {"id":"ph1","name":"CureMed Pharmacy","email":"info@curemed.co.za","password":"password","role":"pharmacy","verified":true},
+  {"id":"ph2","name":"Pharmacy Test","email":"Pharmacy@gmail.com","password":"12345678","role":"pharmacy","verified":true}
 ]

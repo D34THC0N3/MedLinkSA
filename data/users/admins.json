@@ -1,3 +1,4 @@
 [
-  {"id":"a1","name":"Admin User","email":"admin","password":"12345678","auth":"123456","role":"admin","verified":true}
+  {"id":"a1","name":"Admin User","email":"admin","password":"12345678","auth":"123456","role":"admin","verified":true},
+  {"id":"a2","name":"Administrator","email":"admin@gmail.com","password":"12345678","role":"admin","verified":true}
 ]

@@ -129,13 +129,8 @@ export default function DoctorDashboard() {
           </p>
         </div>
 
-        {/* 3-column grid: 40% | 35% | 25% */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '2fr 1.75fr 1.25fr',
-          gap: '20px',
-          alignItems: 'start',
-        }}>
+        {/* Responsive 3-column grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1.75fr_1.25fr] gap-4 lg:gap-5 items-start">
 
           {/* ——— LEFT COLUMN (40%) ——— */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -151,11 +146,12 @@ export default function DoctorDashboard() {
                   View All <ChevronRight size={14} />
                 </button>
               </div>
-              <div className="card-body" style={{ padding: '0' }}>
+              <div className="card-body" style={{ padding: '0', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
                 <table style={{
                   width: '100%',
                   borderCollapse: 'collapse',
                   fontSize: '13px',
+                  minWidth: '500px',
                 }}>
                   <thead>
                     <tr>

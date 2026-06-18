@@ -27,6 +27,7 @@ export const metadata: Metadata = {
   title: "MedLink SA — The Future of Healthcare, Available Today.",
   description:
     "South Africa's Digital Health Ecosystem. Connect patients, providers, and facilities in one intelligent platform.",
+  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
 };
 
 export default function RootLayout({

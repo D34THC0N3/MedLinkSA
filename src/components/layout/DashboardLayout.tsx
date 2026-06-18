@@ -28,10 +28,12 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
       <BackgroundCanvas />
       <div className="vignette fixed inset-0 z-[1] pointer-events-none" />
       <Sidebar />
-      <div className="flex-1 flex flex-col ml-[240px] relative z-10">
+      <div className="flex-1 flex flex-col relative z-10 min-w-0">
         <TopBar title={resolvedTitle} />
-        <main className="flex-1 overflow-y-auto p-6" style={{ background: 'transparent' }}>
-          {children}
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6" style={{ background: 'transparent' }}>
+          <div className="w-full mx-auto" style={{ maxWidth: '1440px' }}>
+            {children}
+          </div>
         </main>
       </div>
     </div>

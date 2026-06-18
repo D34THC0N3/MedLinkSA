@@ -114,7 +114,7 @@ export default function HospitalDashboardPage() {
       <div className="space-y-5">
 
         {/* Stat Row */}
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           {statCards.map((s, i) => (
             <div key={i} className="stat-card" style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: 12, padding: 20 }}>
               <div className="flex items-center justify-between mb-3">
@@ -135,7 +135,7 @@ export default function HospitalDashboardPage() {
         </div>
 
         {/* Two Column Layout */}
-        <div className="grid grid-cols-5 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5">
 
           {/* Left Column — 3 cols */}
           <div className="col-span-3 space-y-5">
